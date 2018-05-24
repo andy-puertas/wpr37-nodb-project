@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
-import Header from '/Users/andypuertas/Desktop/webdev/devmountain/wpr37/nahdb-project/src/components/Header.js';
-import Sidenav from '/Users/andypuertas/Desktop/webdev/devmountain/wpr37/nahdb-project/src/components/Sidenav.js';
-import Login from '/Users/andypuertas/Desktop/webdev/devmountain/wpr37/nahdb-project/src/components/Login.js';
-//import Button from '/Users/andypuertas/Desktop/webdev/devmountain/wpr37/nahdb-project/src/components/Button.js';
+import Header from './components/Header.js';
+import Sidenav from './components/Sidenav.js';
+import Login from './components/Login.js';
+//import Button from './components/Button.js';
+import UserEdit from './components/UserEdit.js';
+
 
 class App extends Component {
   constructor(props){
@@ -14,7 +16,7 @@ class App extends Component {
       baseUrl: '',
       username: '',
       password: '',
-      users: []
+      users: [],
     };
 
    
@@ -55,7 +57,13 @@ class App extends Component {
     
   }
 
-  editUser(){
+  editUser(username, password, id){
+    axios.put(`/api/users/${id}`, {username: username, password: password} )
+    .then((res) => {
+      this.setState({
+        users:res.data
+      })
+    })
 
   }
 
@@ -72,9 +80,13 @@ class App extends Component {
       console.log(e.id);
       return(
         <div>
-          <h1>{e.username}</h1>
-          <h1>{e.password}</h1>
-          {/* <Button name='Edit'/> */}
+          <UserEdit 
+          editUser= {this.editUser}
+          username= {e.username}
+          password= {e.password}
+          id= {e.id}
+           />
+         
          <button onClick={() => this.deleteUser(e.id)}>
           Delete
          </button>
